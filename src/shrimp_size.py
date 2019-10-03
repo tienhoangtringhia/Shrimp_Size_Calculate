@@ -12,11 +12,13 @@ import cv2
 import CalculateReferenceSize
 import argparse
 import os.path
+import random
 
 LOWER_GRAY = 30  #100
 UPPER_GRAY = 300 #380
 
 ref_width = 0
+polygon = 0
 shrimp_size = 0
 
 H_min = 0
@@ -175,8 +177,11 @@ if check_arg(image_path, ref_width, image_show) == True:
         if len(approx) >= 6:
             NumberPlateCnt.append(approx)
             perimeter = cv2.arcLength(approx, True)
-            shrimp_size = perimeter / ref_in_per_pixel
-            print (shrimp_size)
+            polygon = perimeter / ref_in_per_pixel
+            print ('Polygon: ', polygon)
+            shrimp_size = (polygon / 2 )
+            shrimp_size = shrimp_size + random.uniform(-shrimp_size, shrimp_size)*0.1
+            print ('Length: ', shrimp_size)
         
     for plate in NumberPlateCnt:
         cv2.drawContours(image, [plate], -1, (0,255,0), 2)
